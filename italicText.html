@@ -1,0 +1,28 @@
+<template id="italicTemplate">
+    <style>
+        :host::shadow i {
+            font-size:20px;
+        }
+    </style>
+    <i><!--Text Placeholder --></i>
+</template>
+<script>
+    (function() {
+        var selfDocument = document.currentScript.ownerDocument,
+            objectPrototype = Object.create(HTMLElement.prototype);
+        Object.defineProperty(objectPrototype, 'title', {
+            writable : true
+        });
+        objectPrototype.createdCallback = function() {
+            var shadow = this.createShadowRoot(),
+                templateContent = selfDocument.querySelector('#italicTemplate').content,
+                templateNodes = document.importNode(templateContent, true),
+                italicElement = templateNodes.querySelector("i");
+            italicElement.innerText = this.title;
+            shadow.appendChild(templateNodes);
+        };
+        var digitalClockElement = document.registerElement("italic-text", {
+            prototype: objectPrototype
+        });
+    })();
+</script>
